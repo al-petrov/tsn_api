@@ -9,8 +9,12 @@ class UserController {
     }
 
     async getUsers(req, res) {
-        const users = await db.query(`SELECT * FROM users`)
-        res.json(users.rows)   
+        let {current, size} = req.query;
+        size = size || 5;
+        current = current || 1;
+        const users = await db.query(`SELECT * FROM users ORDER BY id LIMIT $1 OFFSET $2`, [size, (current - 1) * (size)]);
+        const count = await db.query(`SELECT count(*) FROM users`);
+        res.json({count: count.rows[0].count, users: users.rows});
     }
 
     async getOneUser(req, res) {
