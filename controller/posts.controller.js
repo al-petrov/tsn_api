@@ -1,15 +1,14 @@
 const db = require('../db')
 
-class UserController {
-    async createUser(req, res) {
-        const {userName, country, friends, userStatus, img} = req.body
-        // if (userName && country && !friends)
-        const newPerson = await db.query(`INSERT INTO users (userName, country, friends, userStatus, img) values ($1, $2, $3, $4, $5) RETURNING *`,
-        [userName, country, friends, userStatus, img])
-        res.json(newPerson.rows[0])
+class PostsController {
+    async createPost(req, res) {
+        const {userId, postText, likeCount} = req.body
+        const newPost = await db.query(`INSERT INTO posts (user_id, posttext, likecount) values ($1, $2, $3) RETURNING *`,
+        [userId, postText, likeCount])
+        res.json(newPost.rows[0])
     }
 
-    async getUsers(req, res) {
+    async getPosts(req, res) {
         let {current, size} = req.query;
         size = size || 5;
         current = current || 1;
@@ -18,20 +17,20 @@ class UserController {
         res.json({count: count.rows[0].count, users: users.rows});
     }
 
-    async getOneUser(req, res) {
-        const id = req.params.id;
-        const user = await db.query(`SELECT * FROM users WHERE id = ${id}`);
-        res.json(user.rows[0]);
+    async getOnePost(req, res) {
+        const id = req.params.id
+        const user = await db.query(`SELECT * FROM users WHERE id = ${id}`)
+        res.json(user.rows[0])
     }
 
-    async updateUser(req, res) {
+    async updatePost(req, res) {
         const {id, userName, country} = req.body
         console.log(id, userName, country) 
         const user = await db.query(`UPDATE users set userName = $1, country = $2 WHERE id = $3 RETURNING *`, [userName, country, id])
         res.json(user.rows[0])     
     }
 
-    async deleteUser(req, res) {
+    async deletePost(req, res) {
         const id = req.params.id
         const user = await db.query(`DELETE FROM users WHERE id = $1`, [id])
         res.json(user.rows[0])
@@ -39,4 +38,4 @@ class UserController {
 
 }
 
-module.exports = new UserController()
+module.exports = new PostsController()
