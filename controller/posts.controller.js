@@ -1,5 +1,6 @@
 const db = require('../db')
 
+
 class PostsController {
     async createPost(req, res) {
         const { userId, postText, likeCount } = req.body
