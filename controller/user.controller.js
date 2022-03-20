@@ -11,16 +11,16 @@ class UserController {
 
     async getUsers(req, res) {
 
-        let cookie = req.cookies;
+        // let cookie = req.cookies;
         
-        console.log(cookie);
-        if (cookie && !cookie.token) {
-            res.cookie('token', 1);
-            console.log('seted');
-            console.log(cookie.token);
-        } else {
-            console.log(cookie.token);
-        }
+        // console.log(cookie);
+        // if (cookie && !cookie.token) {
+        //     res.cookie('token', 1);
+        //     console.log('seted');
+        //     console.log(cookie.token);
+        // } else {
+        //     console.log(cookie.token);
+        // }
         // if (cookie === undefined) {
         //     res.cookie('token', 1);
         // }
@@ -34,14 +34,16 @@ class UserController {
 
     async getOneUser(req, res) {
         const id = req.params.id;
+        console.log(id)
         const user = await db.query(`SELECT * FROM users WHERE id = ${id}`);
         res.json(user.rows[0]);
     }
 
     async updateUser(req, res) {
-        const { id, userName, country } = req.body
-        console.log(id, userName, country)
-        const user = await db.query(`UPDATE users set userName = $1, country = $2 WHERE id = $3 RETURNING *`, [userName, country, id])
+        const { id, username, country, userstatus, img, login } = req.body
+        console.log(id, username, country, userstatus, img, login)
+        const user = await db.query(`UPDATE users set username = $1, country = $2, userstatus = $3, img = $4 WHERE id = $5 RETURNING *`, [username, country, userstatus, img, id])
+
         res.json(user.rows[0])
     }
 
