@@ -14,21 +14,28 @@ class PostsController {
     let { user_id, current, size } = req.query;
     size = size || 20;
     current = current || 1;
-    // console.log("посты ", user_id, current, size)
+    console.log("getPosts");
     if (!user_id) {
       res.json({ count: 0, posts: [] });
     } else {
       // console.log(user_id, current, size)
-      const users = await db.query(
-        `SELECT id, user_id, posttext as text, likecount FROM posts WHERE user_id = $1 ORDER BY id DESC LIMIT $2 OFFSET $3`,
-        [user_id, size, (current - 1) * size]
+      const posts = await db.query(
+        `SELECT posts.id, user_id, posttext as text, likecount, img as userImg 
+        FROM posts LEFT JOIN users ON posts.user_id = users.id 
+        WHERE user_id = $1 ORDER BY id DESC LIMIT $2 OFFSET $3`,
+        [
+          // `SELECT id, user_id, posttext as text, likecount,  FROM posts WHERE user_id = $1 ORDER BY id DESC LIMIT $2 OFFSET $3`,
+          user_id,
+          size,
+          (current - 1) * size,
+        ]
       );
       const count = await db.query(
         `SELECT count(*) FROM posts WHERE user_id = $1`,
         [user_id]
       );
-      // console.log("found ", users.rows);
-      res.json({ count: count.rows[0].count, posts: users.rows });
+      // console.log("found ", posts.rows);
+      res.json({ count: count.rows[0].count, posts: posts.rows });
     }
   }
 

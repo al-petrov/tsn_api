@@ -1,12 +1,11 @@
 const db = require("../db");
-//const cookieParser = require('cookie-parser')
 
 class AuthController {
   async authMe(req, res) {
     let cookie = req.cookies;
 
     // console.log('isLogined = ' + cookie.token);
-    // console.log(typeof cookie.token)
+    console.log("auth");
     if (!cookie) {
       res.json({ isLogined: false });
     } else {

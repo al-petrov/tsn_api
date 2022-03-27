@@ -3,6 +3,7 @@ const userRouter = require("./routes/user.routes");
 const postsRouter = require("./routes/posts.routes");
 const loginRouter = require("./routes/login.routes");
 const authRouter = require("./routes/auth.routes");
+const messagesRouter = require("./routes/messages.routes");
 const cookieParser = require("cookie-parser");
 const db = require("./db");
 
@@ -44,5 +45,6 @@ app.use("/api", authRouter);
 app.use("/api", loginRouter);
 app.use("/api", userRouter);
 app.use("/api", postsRouter);
+app.use("/api", messagesRouter);
 
 app.listen(PORT, () => console.log(`server started on port ${PORT}`));

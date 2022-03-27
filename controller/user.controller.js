@@ -12,10 +12,11 @@ class UserController {
   }
 
   async getUsers(req, res) {
+    console.log("getUsers");
     let { current, size } = req.query;
     size = size || 5;
     current = current || 1;
-    console.log(size, current);
+    // console.log(size, current);
     const users = await db.query(
       `SELECT * FROM users ORDER BY id LIMIT $1 OFFSET $2`,
       [size, (current - 1) * size]
@@ -26,20 +27,35 @@ class UserController {
 
   async getOneUser(req, res) {
     const id = req.params.id;
-    console.log(`SELECT * FROM users WHERE id = ${id}`);
+    // console.log(`SELECT * FROM users WHERE id = ${id}`);
     const user = await db.query(`SELECT * FROM users WHERE id = ${id}`);
     res.json(user.rows[0]);
   }
 
   async updateUser(req, res) {
-    const { id, username, country, userstatus, img, login } = req.body;
-    // console.log(id, username, country, userstatus, img, login);
-    const user = await db.query(
-      `UPDATE users set username = $1, country = $2, userstatus = $3, img = $4 WHERE id = $5 RETURNING *`,
-      [username, country, userstatus, img, id]
-    );
-    // console.log(user.rows[0]);
-    res.json(user.rows[0]);
+    const { id, username, country, userstatus, img } = req.body;
+    // console.log(id, username, country, userstatus, img);
+    if (id) {
+      const existingUser = await db.query(
+        `SELECT username, country, userstatus, img FROM users WHERE id = $1 RETURNING *`,
+        [id]
+      );
+      let myUser = existingUser.rows[0];
+      const user = await db.query(
+        `UPDATE users set username = $1, country = $2, userstatus = $3, img = $4 WHERE id = $5 RETURNING *`,
+        [
+          username || myUser.username,
+          country || myUser.country,
+          userstatus || myUser.userstatus,
+          img || myUser.userstatus,
+          id,
+        ]
+      );
+      // console.log(user.rows[0]);
+      res.json(user.rows[0]);
+    } else {
+      res.json({});
+    }
   }
 
   async deleteUser(req, res) {

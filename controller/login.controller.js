@@ -6,6 +6,7 @@ class UserController {
     const { login, pas } = req.body;
     // console.log()
     // console.log(login, pas)
+    console.log("login");
     const thisUser = await db.query(
       `SELECT username, id, img, userstatus, password FROM users WHERE login = $1`,
       [login]

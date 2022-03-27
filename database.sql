@@ -14,3 +14,13 @@ create TABLE posts(
     likeCount INTEGER,
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
+
+create TABLE massages(
+    id SERIAL PRIMARY KEY,
+	sender_id INTEGER,
+	getter_id INTEGER,
+    messagetext VARCHAR(1000),
+    senddate DATE,
+	FOREIGN KEY (sender_id) REFERENCES users (id),
+	FOREIGN KEY (getter_id) REFERENCES users (id)
+);
