@@ -34,10 +34,10 @@ class UserController {
 
   async updateUser(req, res) {
     const { id, username, country, userstatus, img } = req.body;
-    // console.log(id, username, country, userstatus, img);
+    console.log("update user");
     if (id) {
       const existingUser = await db.query(
-        `SELECT username, country, userstatus, img FROM users WHERE id = $1 RETURNING *`,
+        `SELECT username, country, userstatus, img FROM users WHERE id = $1`,
         [id]
       );
       let myUser = existingUser.rows[0];
@@ -47,7 +47,7 @@ class UserController {
           username || myUser.username,
           country || myUser.country,
           userstatus || myUser.userstatus,
-          img || myUser.userstatus,
+          img || myUser.img,
           id,
         ]
       );
