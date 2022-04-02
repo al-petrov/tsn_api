@@ -35,6 +35,7 @@ class UserController {
   async updateUser(req, res) {
     const { id, username, country, userstatus, img } = req.body;
     console.log("update user");
+    console.log(id, username, country, userstatus, img);
     if (id) {
       const existingUser = await db.query(
         `SELECT username, country, userstatus, img FROM users WHERE id = $1`,
@@ -51,7 +52,7 @@ class UserController {
           id,
         ]
       );
-      // console.log(user.rows[0]);
+      console.log(user.rows[0]);
       res.json(user.rows[0]);
     } else {
       res.json({});
