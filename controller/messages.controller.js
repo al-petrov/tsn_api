@@ -24,7 +24,8 @@ class messagesController {
     // console.log("messages controller");
     if (senderId && getterId) {
       const messages = await db.query(
-        `SELECT 
+        `SELECT *
+        FROM (SELECT 
           messages.id, 
           sender_id,
           getter_id,
@@ -40,7 +41,8 @@ class messagesController {
           users as userget 
           ON messages.getter_id = userget.id 
         WHERE sender_id = $1 and getter_id = $2 OR sender_id = $2 and getter_id = $1
-        ORDER BY id LIMIT $3 OFFSET $4`,
+        ORDER BY id DESC LIMIT $3 OFFSET $4) as x
+        ORDER BY senddate ASC`,
         [senderId, getterId, size, (current - 1) * size]
       );
       //console.log(messages.rows);
