@@ -4,7 +4,7 @@ class AuthController {
   async authMe(req, res) {
     let cookie = req.cookies;
 
-    // console.log('isLogined = ' + cookie.token);
+    console.log("isLogined = ", cookie);
     console.log("auth");
     if (!cookie) {
       res.json({ isLogined: false });

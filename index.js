@@ -4,6 +4,7 @@ const postsRouter = require("./routes/posts.routes");
 const loginRouter = require("./routes/login.routes");
 const authRouter = require("./routes/auth.routes");
 const messagesRouter = require("./routes/messages.routes");
+const redirectRouter = require("./routes/redirect.routes");
 const cookieParser = require("cookie-parser");
 const db = require("./db");
 
@@ -35,12 +36,14 @@ var myLoger = function (req, res, next) {
 app.use(
   cors({
     credentials: true,
-    origin: "http://barabulka.site",
+    origin: ["http://barabulka.site", "https://barabulka.site"],
+    // origin: "http://barabulka.site",
   })
 );
 app.use(cookieParser());
 app.use(express.json());
 //app.use(myLoger)
+app.use("/api", redirectRouter);
 app.use("/api", authRouter);
 app.use("/api", loginRouter);
 app.use("/api", userRouter);

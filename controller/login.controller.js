@@ -21,6 +21,7 @@ class UserController {
           [thisUser.rows[0].id, uuid.v4(), new Date()]
         );
         res.cookie("token", newToken.rows[0].user_token);
+        console.log("cookie", newToken.rows[0].user_token);
         res.json({
           isLogined: true,
           id: newToken.rows[0].user_id,
