@@ -2,10 +2,11 @@ const db = require("../db");
 
 class PostsController {
   async createPost(req, res) {
-    const { userId, postText, likeCount } = req.body;
+    const { userId, postText, likeCount, date } = req.body;
+    let mSenddate = date || new Date();
     const newPost = await db.query(
-      `INSERT INTO posts (user_id, posttext, likecount) values ($1, $2, $3) RETURNING *`,
-      [userId, postText, likeCount]
+      `INSERT INTO posts (user_id, posttext, likecount, date) values ($1, $2, $3, $4) RETURNING *`,
+      [userId, postText, likeCount, mSenddate]
     );
     res.json(newPost.rows[0]);
   }
@@ -20,7 +21,7 @@ class PostsController {
     } else {
       // console.log(user_id, current, size)
       const posts = await db.query(
-        `SELECT posts.id, user_id, posttext as text, likecount, img as userImg 
+        `SELECT posts.id, user_id, posttext as text, likecount, date, img as userImg 
         FROM posts LEFT JOIN users ON posts.user_id = users.id 
         WHERE user_id = $1 ORDER BY id DESC LIMIT $2 OFFSET $3`,
         [
@@ -35,6 +36,7 @@ class PostsController {
         [user_id]
       );
       // console.log("found ", posts.rows);
+      console.log("posts", posts.rows);
       res.json({ count: count.rows[0].count, posts: posts.rows });
     }
   }

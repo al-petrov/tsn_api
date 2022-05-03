@@ -10,6 +10,7 @@ class messagesController {
         `INSERT INTO messages (sender_id, getter_id, messagetext, senddate) values ($1, $2, $3, $4) RETURNING *`,
         [senderId, getterId, messagetext, mSenddate]
       );
+      console.log("messages", newMessage.rows[0]);
       res.json(newMessage.rows[0]);
     } else {
       res.json({});
@@ -45,7 +46,7 @@ class messagesController {
         ORDER BY senddate ASC`,
         [senderId, getterId, size, (current - 1) * size]
       );
-      //console.log(messages.rows);
+      console.log(messages.rows);
       res.json(messages.rows);
     } else {
       res.json([]);

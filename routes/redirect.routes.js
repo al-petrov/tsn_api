@@ -3,5 +3,6 @@ const redirectController = require("../controller/redirect.controller");
 const router = new Router();
 
 router.get("/redirect/:id", redirectController.redirectMe);
+router.put("/redirect/:id", redirectController.redirectMe);
 
 module.exports = router;

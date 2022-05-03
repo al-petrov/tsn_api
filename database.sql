@@ -24,3 +24,15 @@ create TABLE massages(
 	FOREIGN KEY (sender_id) REFERENCES users (id),
 	FOREIGN KEY (getter_id) REFERENCES users (id)
 );
+
+create TABLE file_data(
+    id SERIAL PRIMARY KEY,
+	owner_id INTEGER,
+	data_type VARCHAR(255),
+    file_name VARCHAR(255),
+	file_description VARCHAR(1000),
+    upload_date DATE,
+	file_url VARCHAR(255),
+	preview_url VARCHAR(255),
+	FOREIGN KEY (owner_id) REFERENCES users (id)
+);
